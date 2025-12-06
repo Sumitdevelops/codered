@@ -1,0 +1,5 @@
+codered/.git_backup
+__pycache__/
+*.pyc
+.env
+.DS_Store
