@@ -16,8 +16,10 @@ st.set_page_config(
     layout="wide"
 )
 
+import os
+
 # Orchestrator API endpoint
-ORCHESTRATOR_URL = "http://localhost:8000/api"
+ORCHESTRATOR_URL = os.getenv("ORCHESTRATOR_URL", "http://localhost:8000/api")
 
 # Custom CSS for better UI
 st.markdown("""
