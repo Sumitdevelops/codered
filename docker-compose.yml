@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+<<<<<<< HEAD
   # Orchestrator Service
   orchestrator:
     build: ./orchestrator
@@ -138,3 +139,29 @@ volumes:
   orchestrator-data:
   prometheus-data:
   grafana-data:
+=======
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./backend:/app/backend
+      - ./ml:/app/ml
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://backend:8000
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app/frontend
+>>>>>>> 2be7e7753aed9b7e44646a312b81922a33871ecf

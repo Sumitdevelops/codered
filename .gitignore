@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Python
 __pycache__/
 *.py[cod]
@@ -44,3 +45,10 @@ Thumbs.db
 
 # Grafana
 grafana/data/
+=======
+codered/.git_backup
+__pycache__/
+*.pyc
+.env
+.DS_Store
+>>>>>>> 2be7e7753aed9b7e44646a312b81922a33871ecf
