@@ -341,4 +341,4 @@ This is a prototype project. For improvements or suggestions, please document th
 
 ---
 
-**Built with ❤️ for efficient hybrid compute management**
+**Built with ❤️ for efficient hybrid compute management hHAHAAHAH**
