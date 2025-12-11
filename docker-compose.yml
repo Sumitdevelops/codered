@@ -1,0 +1,140 @@
+version: '3.8'
+
+services:
+  # Orchestrator Service
+  orchestrator:
+    build: ./orchestrator
+    container_name: orchestrator
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./orchestrator:/app
+      - orchestrator-data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - orchestrator-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Edge Node
+  edge-node:
+    build: ./nodes/edge
+    container_name: edge-node
+    ports:
+      - "8001:8001"
+    networks:
+      - orchestrator-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8001/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Cloud Node
+  cloud-node:
+    build: ./nodes/cloud
+    container_name: cloud-node
+    ports:
+      - "8002:8002"
+    networks:
+      - orchestrator-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8002/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # GPU Node
+  gpu-node:
+    build: ./nodes/gpu
+    container_name: gpu-node
+    ports:
+      - "8003:8003"
+    networks:
+      - orchestrator-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8003/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Demo UI
+  demo-ui:
+    build: ./dashboard
+    container_name: demo-ui
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./dashboard:/app
+    environment:
+      - STREAMLIT_SERVER_PORT=8501
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+    command: streamlit run demo_ui.py --server.port=8501 --server.address=0.0.0.0
+    networks:
+      - orchestrator-network
+    depends_on:
+      - orchestrator
+
+  # Admin Dashboard
+  admin-dashboard:
+    build: ./dashboard
+    container_name: admin-dashboard
+    ports:
+      - "8502:8502"
+    volumes:
+      - ./dashboard:/app
+    environment:
+      - STREAMLIT_SERVER_PORT=8502
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+    command: streamlit run admin_dashboard.py --server.port=8502 --server.address=0.0.0.0
+    networks:
+      - orchestrator-network
+    depends_on:
+      - orchestrator
+
+  # Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - orchestrator-network
+
+  # Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - orchestrator-network
+    depends_on:
+      - prometheus
+
+networks:
+  orchestrator-network:
+    driver: bridge
+
+volumes:
+  orchestrator-data:
+  prometheus-data:
+  grafana-data:

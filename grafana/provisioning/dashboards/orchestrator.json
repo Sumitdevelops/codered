@@ -1,0 +1,133 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "orchestrator",
+    "title": "AI Workload Orchestrator",
+    "tags": ["orchestrator", "ai", "workload"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 0,
+    "refresh": "10s",
+    "panels": [
+      {
+        "id": 1,
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "type": "piechart",
+        "title": "Workloads per Node",
+        "targets": [
+          {
+            "expr": "sum by (node) (orchestrator_tasks_total)",
+            "legendFormat": "{{node}}",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom"
+          }
+        }
+      },
+      {
+        "id": 2,
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "type": "gauge",
+        "title": "Node Load Percentage",
+        "targets": [
+          {
+            "expr": "orchestrator_node_load_percent",
+            "legendFormat": "{{node}}",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "orientation": "auto",
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "green"},
+                {"value": 60, "color": "yellow"},
+                {"value": 80, "color": "red"}
+              ]
+            },
+            "unit": "percent",
+            "min": 0,
+            "max": 100
+          }
+        }
+      },
+      {
+        "id": 3,
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "type": "graph",
+        "title": "Task Execution Duration",
+        "targets": [
+          {
+            "expr": "rate(orchestrator_task_duration_seconds_sum[5m]) / rate(orchestrator_task_duration_seconds_count[5m])",
+            "legendFormat": "{{node}}",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "s",
+            "label": "Duration"
+          },
+          {
+            "format": "short"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+        "type": "bargauge",
+        "title": "Total Cost by Node",
+        "targets": [
+          {
+            "expr": "sum by (node) (orchestrator_task_cost_dollars_sum)",
+            "legendFormat": "{{node}}",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "orientation": "horizontal",
+          "displayMode": "gradient"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "currencyUSD"
+          }
+        }
+      },
+      {
+        "id": 5,
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 16},
+        "type": "graph",
+        "title": "Tasks Processed Over Time",
+        "targets": [
+          {
+            "expr": "rate(orchestrator_tasks_total[1m])",
+            "legendFormat": "{{node}} - {{status}}",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "ops",
+            "label": "Tasks/sec"
+          },
+          {
+            "format": "short"
+          }
+        ]
+      }
+    ]
+  },
+  "overwrite": true
+}
