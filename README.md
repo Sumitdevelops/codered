@@ -68,47 +68,44 @@ graph TB
 
 ## 🚀 Quick Start
 
+## 🚀 Quick Start
+
 ### Prerequisites
 
-- Docker and Docker Compose installed
-- Python 3.9+ (for local development)
-- 2GB free RAM minimum
+- **Git** (to clone the repository)
+- **Docker Desktop** (must be installed and running)
 
 ### Installation & Running
 
-1. **Clone or navigate to the project directory**:
+1. **Clone the repository**:
    ```bash
-   cd ai_orchestrator
+   git clone https://github.com/Sumitdevelops/codered.git
+   cd codered
    ```
 
-2. **Start the application using Docker Compose**:
+2. **Run the Setup Script**:
+   
+   **Generic (Mac/Linux)**:
    ```bash
-   docker-compose up --build
+   bash setup.sh
    ```
-
-3. **Access the services**:
-   - **Frontend Dashboard**: [http://localhost:8501](http://localhost:8501)
-   - **Backend API**: [http://localhost:8000](http://localhost:8000)
-   - **API Documentation**: [http://localhost:8000/docs](http://localhost:8000/docs)
-
-### Running Locally (Without Docker)
-
-1. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
+   
+   **Windows (PowerShell)**:
+   ```powershell
+   .\setup.ps1
    ```
+   
+   *This script will automatically:*
+   *   *Install necessary local dependencies for ML training*
+   *   *Train the initial ML model*
+   *   *Build and start all Docker services*
 
-2. **Start the Backend**:
-   ```bash
-   cd backend
-   uvicorn main:app --reload --port 8000
-   ```
+3. **Access the Dashboards**:
+   - **Admin Dashboard**: [http://localhost:8502](http://localhost:8502) (Main Control Panel)
+   - **Demo UI**: [http://localhost:8501](http://localhost:8501) (Submit Tasks)
+   - **Grafana**: [http://localhost:3000](http://localhost:3000) (admin/admin)
+   - **Prometheus**: [http://localhost:9090](http://localhost:9090)
 
-3. **Start the Frontend** (in a new terminal):
-   ```bash
-   cd frontend
-   streamlit run app.py --server.port 8501
-   ```
 
 ## 📊 Usage Guide
 
@@ -341,4 +338,4 @@ This is a prototype project. For improvements or suggestions, please document th
 
 ---
 
-**Built with ❤️ for efficient hybrid compute management hHAHAAHAH**
+**Built with ❤️ for efficient hybrid compute management**
