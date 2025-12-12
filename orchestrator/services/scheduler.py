@@ -10,13 +10,15 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+import os
+
 class Scheduler:
     """Handles task dispatching to compute nodes"""
     
     NODE_URLS = {
-        "EDGE": "http://localhost:8001",
-        "CLOUD": "http://localhost:8002",
-        "GPU": "http://localhost:8003"
+        "EDGE": os.getenv("EDGE_NODE_URL", "http://localhost:8001"),
+        "CLOUD": os.getenv("CLOUD_NODE_URL", "http://localhost:8002"),
+        "GPU": os.getenv("GPU_NODE_URL", "http://localhost:8003")
     }
     
     def __init__(self, timeout: float = 30.0):
